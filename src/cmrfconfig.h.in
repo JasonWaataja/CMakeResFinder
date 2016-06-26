@@ -1,0 +1,7 @@
+#ifndef CMRFCONFIG_H
+#define CMRFCONFIG_H
+
+const char CMAKE_INSTALL_PREFIX[] = "@CMAKE_INSTALL_PREFIX@";
+const char CMRF_DEFAULT_DIRECTORY[] = "@CMAKE_INSTALL_PREFIX@/cmrfdefault";
+
+#endif /* CMRF_CONFIG_H */
