@@ -1,31 +1,22 @@
 #ifndef CMRF_H
 #define CMRF_H
 
-int
-cmrf_init_relative (const char *dir_name);
+#include <stdarg.h>
 
-int
-cmrf_init_absolute (const char *dir_name);
 
-int
-cmrf_exit ();
+int cmrf_init (int n_args, ...);
 
-/* Public function to return the value of has_custom_dir.  */
-int
-cmrf_has_custom_dir ();
+int cmrf_exit ();
 
-/* Sets the custom directory to find files in relative to the default cmake
-   installation prefix.  */
-int
-cmrf_set_custom_dir_relative (const char *dir_name);
+int cmrf_add_path_cmake_prefix (const char *dir_name);
 
-/* Sets the custom directory to find files in the full path specified by
-   dir_name.  */
-int
-cmrf_set_custom_dir_absolute (const char *dir_name);
+int cmrf_add_path_relative (const char *dir_name);
 
-const char *
-cmrf_get_res_search_dir ();
+int cmrf_add_path_absolute (const char *dir_name);
+
+int cmrf_is_in_search_paths (const char *dir_name);
+
+const char *cmrf_find_resource (char *const *prefix);
 
 const char *
 cmrf_get_cmake_install_prefix ();
