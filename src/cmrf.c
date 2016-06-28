@@ -135,9 +135,52 @@ int
 cmrf_is_in_search_paths (const char *dir_name)
 {
   int path_found = 0;
-  for (int i = 0; i < search_path_count && !path_fou
-
+  for (int i = 0; i < search_path_count && !path_found; i++)
+    {
+      if (strcmp (search_paths[i], dir_name) == 0)
+	{
+	  path_found = 1;
+	  return 1;
+	}
+    }
   return 0;
+}
+
+const char *cmrf_find_resource (const char *res_name)
+{
+
+  int found_res = 0;
+
+  size_t res_name_len = strlen (res_name);
+
+  for (int i = 0; i < search_path_count && !found_res; i++)
+    {
+      size_t prefix_len = strlen (search_paths[i]) + strlen ("/");
+      size_t total_len = prefix_len + res_name_len;
+
+      char *full_res_path = (char *) malloc (sizeof (char) * (total_len + 1));
+      if (!full_res_path)
+	{
+	  return NULL;
+	}
+      strcpy (full_res_path, search_paths[i]);
+      strcat (full_res_path, "/");
+      strcat (full_res_path, res_name);
+
+      /* Apparently, you can do this with access as well but neither way works
+       * with files over 2 gigs which might be a problem.  */
+
+      struct stat file_info;
+      if (stat (full_res_path, &file_info) == 0)
+	{
+	  return full_res_path;
+	}
+      else
+	{
+	  free (full_res_path);
+	}
+    }
+  return NULL;
 }
 
 static int

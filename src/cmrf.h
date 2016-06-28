@@ -16,7 +16,7 @@ int cmrf_add_path_absolute (const char *dir_name);
 
 int cmrf_is_in_search_paths (const char *dir_name);
 
-const char *cmrf_find_resource (char *const *prefix);
+const char *cmrf_find_resource (const char *res_name);
 
 const char *
 cmrf_get_cmake_install_prefix ();
