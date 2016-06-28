@@ -195,3 +195,9 @@ add_to_search_paths (char *new_dir)
   search_paths[search_path_count] = new_dir;
   return 1;
 }
+
+const char *
+cmrf_get_cmake_install_prefix ()
+{
+  return CMAKE_INSTALL_PREFIX;
+}
