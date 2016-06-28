@@ -29,4 +29,10 @@ install(EXPORT cmrf
 include (InstallRequiredSystemLibraries)
 set (CPACK_RESOURCE_FILE_LICENSE  
 	"${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
-     include (CPack)
+
+set (CPACK_SOURCE_IGNORE_FILES
+	.vimrc
+	.ycm_extra_conf
+	)
+
+include (CPack)
