@@ -146,7 +146,7 @@ cmrf_is_in_search_paths (const char *dir_name)
   return 0;
 }
 
-const char *cmrf_find_resource (const char *res_name)
+char *cmrf_find_resource (const char *res_name)
 {
 
   int found_res = 0;
