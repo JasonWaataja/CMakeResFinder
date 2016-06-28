@@ -8,6 +8,8 @@
 #include <stdarg.h>
 #include <sys/stat.h>
 
+#define INITIAL_SEARCH_PATHS_SIZE 3
+
 /* True if the library init function has been called, false otherwise.  */
 static int init_status;
 
@@ -15,43 +17,49 @@ static char **search_paths;
 
 static unsigned int search_path_count;
 
+static int search_paths_size = INITIAL_SEARCH_PATHS_SIZE;
+
 static int
 add_to_search_paths (char *new_dir);
 
 int
 cmrf_init (int n_args, ...)
 {
-  search_path_count = n_args;
-  if (n_args > 0)
-    {
-      search_paths = (char **) malloc (sizeof (char *) * (n_args));
-      if (!search_paths)
-        {
-          fprintf (stderr, "cmrf: Error allocating memory.\n");
-          init_status = 0;
-          return 0;
-        }
-      va_list arg;
-      va_start (arg, n_args);
-      for (int i = 0; i < n_args; i++)
-        {
-          const char *temp_str = va_arg (arg, const char *);
-          if (temp_str != NULL)
-            {
-              size_t length = strlen (temp_str);
-              search_paths[i] = (char *) malloc (sizeof (char) * (length +1));
-              if (!search_paths[i])
-                {
-                  fprintf (stderr, "cmrf: Error allocating memory.\n");
-                  init_status = 0;
-                  return 0;
-                }
-              strcpy (search_paths[i], temp_str);
-            }
+  search_path_count = (n_args > 0) ? n_args : 0;
 
-        }
-      va_end (arg);
+  search_paths_size = (n_args < INITIAL_SEARCH_PATHS_SIZE) 
+    ? n_args : INITIAL_SEARCH_PATHS_SIZE;
+
+  search_paths = (char **) malloc (sizeof (char *) * (search_paths_size));
+
+  if (!search_paths)
+    {
+      fprintf (stderr, "cmrf: Error allocating memory.\n");
+      init_status = 0;
+      return 0;
     }
+
+  va_list arg;
+  va_start (arg, n_args);
+  for (int i = 0; i < search_paths_size; i++)
+    {
+      const char *temp_str = va_arg (arg, const char *);
+      if (temp_str != NULL)
+	{
+	  size_t length = strlen (temp_str);
+	  search_paths[i] = (char *) malloc (sizeof (char) * (length +1));
+	  if (!search_paths[i])
+	    {
+	      fprintf (stderr, "cmrf: Error allocating memory.\n");
+	      init_status = 0;
+	      return 0;
+	    }
+	  strcpy (search_paths[i], temp_str);
+	}
+
+    }
+  va_end (arg);
+  init_status = 1;
   return 1;
 }
 
@@ -186,13 +194,19 @@ char *cmrf_find_resource (const char *res_name)
 static int
 add_to_search_paths (char *new_dir)
 {
-  size_t new_size = sizeof (char *) * (search_path_count + 1);
-  if (!realloc (search_paths, new_size))
+  int new_count = search_path_count + 1;
+  if (new_count > search_paths_size)
     {
-      fprintf (stderr, "cmrf: Error adding new search path to memory\n");
-      return 0;
+      int new_size = search_paths_size + 1;
+      if (!realloc (search_paths, sizeof (char *) * new_size))
+	{
+	  fprintf (stderr, "cmrf: Error adding new search path to memory.\n");
+	  return 0;
+	}
+      search_paths_size = new_size;
     }
   search_paths[search_path_count] = new_dir;
+  search_path_count = new_count;
   return 1;
 }
 
