@@ -10,7 +10,7 @@ include_directories("${PROJECT_BINARY_DIR}")
 
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
-file(GLOB SOURCES "src/*.c")
+file(GLOB SOURCES src/cmrf.c)
 add_library(cmrf ${SOURCES})
 
 install (TARGETS cmrf EXPORT cmrf
@@ -25,3 +25,8 @@ install (FILES src/cmrf.h
 install(EXPORT cmrf
    NAMESPACE cmrf_ 
    DESTINATION lib/cmrf)
+
+include (InstallRequiredSystemLibraries)
+set (CPACK_RESOURCE_FILE_LICENSE  
+	"${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+     include (CPack)
