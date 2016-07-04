@@ -3,7 +3,7 @@ A simpe library to find resources dynamically for use with CMake written in C.
 
 # Installation
 You will need CMake to install it. Create a directory to build in. `mkdir build && cd build`. Then run `cmake ..`. Then build the
-project like you would for any other project and install it. For Unix and Linux, run `make` and `sudo maki install`
+project like you would for any other project and install it. For Unix and Linux, run `make` and `sudo make install`
 
 # Usage
 Installing the library wiil install a cmrf.cmake file which you can use in your own programming. Include it in your project and
