@@ -27,7 +27,7 @@ cmrf_init (int n_args, ...)
 {
   search_path_count = (n_args > 0) ? n_args : 0;
 
-  search_paths_size = (n_args < INITIAL_SEARCH_PATHS_SIZE) 
+  search_paths_size = (n_args > INITIAL_SEARCH_PATHS_SIZE) 
     ? n_args : INITIAL_SEARCH_PATHS_SIZE;
 
   search_paths = (char **) malloc (sizeof (char *) * (search_paths_size));
@@ -41,7 +41,7 @@ cmrf_init (int n_args, ...)
 
   va_list arg;
   va_start (arg, n_args);
-  for (int i = 0; i < search_paths_size; i++)
+  for (int i = 0; i < n_args; i++)
     {
       const char *temp_str = va_arg (arg, const char *);
       if (temp_str != NULL)
